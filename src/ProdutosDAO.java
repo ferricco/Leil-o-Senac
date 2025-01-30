@@ -78,7 +78,41 @@ public class ProdutosDAO {
         return listagem;
     }
     
-    
+    public void venderProduto(int id){
+        
+        conn = new conectaDAO().connectDB();
+        
+        String sql = "UPDATE produtos SET status = ('Vendido') WHERE id = ?";
+        
+        try{
+            conn.setAutoCommit(false);
+            
+            prep = conn.prepareStatement(sql);
+            prep.setInt(1, id);
+            prep.executeUpdate();
+            
+            conn.commit();
+            JOptionPane.showMessageDialog(null, "Produto vendido com sucesso");
+            
+        }catch(SQLException e){
+            try{
+                conn.rollback();
+                JOptionPane.showMessageDialog(null, "Erro ao vender produto");
+                
+            }catch(SQLException ex){
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            
+        }finally{
+            try{
+                conn.setAutoCommit(true);
+                
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }  
     
         
 }
